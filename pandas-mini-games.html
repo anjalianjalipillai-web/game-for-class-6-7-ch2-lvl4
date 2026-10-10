@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pandas Mini Games | Young IT Germany</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:linear-gradient(135deg,#0a8f7f 0%,#1a6fb5 50%,#1f45c8 100%) fixed;font-family:Arial,Helvetica,sans-serif;font-size:20px;color:#10213f}
+.logo{position:fixed;top:10px;left:12px;font-size:14px;font-weight:bold;background:#fff;border-radius:20px;padding:5px 12px;box-shadow:0 2px 6px #0004;z-index:5}
+.logo b{color:#1f45c8}.logo i{color:#ff9f1c;font-style:normal}.logo u{color:#0a8f7f;text-decoration:none}
+main{max-width:900px;margin:0 auto;padding:62px 14px 40px}
+h1{font-size:40px;text-align:center;color:#fff;margin:10px 0;text-shadow:0 2px 4px #0006}
+h2{font-size:30px;color:#fff;margin:6px 0;text-shadow:0 2px 4px #0006}
+.sub{text-align:center;font-size:22px;color:#fff;margin-bottom:16px}
+.card{background:#fff;border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 6px 16px #0003;line-height:1.5}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.mc{background:#fff;border:5px solid #fff;border-radius:22px;padding:14px;text-align:center;cursor:pointer;font-family:inherit;font-size:20px;color:#10213f;box-shadow:0 6px 14px #0003}
+.mc:hover{border-color:#ffd23f;transform:translateY(-3px)}.mc .e{font-size:50px;display:block}.mc.v{border-color:#2fd6a3}
+.mc small{display:block;color:#1f45c8;font-weight:bold;margin-top:4px}
+.b{background:#1f45c8;color:#fff;border:0;border-radius:14px;padding:12px 20px;font-size:20px;font-family:inherit;cursor:pointer;margin:6px 4px}
+.b.g{background:#0a8f7f}.b.o{background:#e67e00}.b.w{background:#fff;color:#1f45c8;border:3px solid #1f45c8}
+input[type=text]{font-size:20px;font-family:inherit;padding:10px;border:3px solid #9fb3e8;border-radius:12px;width:100%;max-width:360px}
+.pill{display:inline-block;background:#ffd23f;color:#10213f;border-radius:20px;padding:4px 14px;font-weight:bold;font-size:16px}
+.say{display:flex;gap:12px;align-items:center;background:#e8f7f3;border-left:8px solid #0a8f7f;border-radius:16px;padding:12px;margin:10px 0}.say .c{font-size:54px}
+.tips{background:#fff8dc;border-left:8px solid #e67e00;border-radius:12px;padding:8px 16px;margin-top:14px;font-size:18px}.tips summary{font-weight:bold;cursor:pointer;font-size:20px}
+code{background:#0f1d3d;color:#b9ffd9;border-radius:8px;padding:2px 8px;font-family:Consolas,monospace;font-size:18px}
+pre.code{background:#0f1d3d;color:#b9ffd9;border-radius:12px;padding:12px;overflow-x:auto;font-size:19px;font-family:Consolas,monospace;margin:8px 0;min-height:48px}
+table.t{border-collapse:collapse;width:100%;font-size:19px;margin:10px 0}
+.t th{background:#1f45c8;color:#fff;padding:9px;text-align:left}.t td{padding:8px 9px;border-bottom:2px solid #dbe4fb}
+.t .hl{background:#ffe27a!important;color:#10213f!important;font-weight:bold}.wrap{overflow-x:auto}
+.nm{background:#fff;border:3px solid #1f45c8;color:#1f45c8;border-radius:30px;padding:8px 18px;font-size:19px;font-weight:bold;cursor:pointer;margin:4px;font-family:inherit}
+.nm.sel{background:#1f45c8;color:#fff}.nm:disabled{opacity:.35;cursor:default}
+.ok{color:#0b7a4f;font-weight:bold}.no{color:#c2185b;font-weight:bold}
+.opt{display:block;width:100%;text-align:left;margin:6px 0}.opt.right{background:#0b7a4f}.opt.wrong{background:#c2185b}
+.nav{display:flex;justify-content:space-between;flex-wrap:wrap;margin-top:10px}
+.hero{text-align:center;padding:30px 10px}.hero .ci{display:inline-block;background:#fff;border-radius:50%;padding:12px;box-shadow:0 6px 16px #0004}
+.mem{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.cardm{height:90px;border:0;border-radius:14px;background:#1f45c8;color:#fff;font-size:30px;cursor:pointer;font-family:inherit;padding:6px}
+.cardm.f{background:#fff;color:#10213f;border:3px solid #1f45c8;font-size:17px;font-weight:bold}.cardm.m{background:#d7f5ec;border-color:#0b7a4f;color:#0b7a4f}
+.prog{font-weight:bold;color:#1f45c8}
+</style></head><body>
+<div class="logo"><b>Young</b> <i>IT</i> <u>Germany</u></div>
+<main id="app"></main>
+<script>
+const T=[{n:'Sam',a:12,g:5,s:450,e:'🧑'},{n:'Ali',a:13,g:8,s:700,e:'👦'},{n:'Tara',a:12,g:6,s:550,e:'👧'},{n:'Neha',a:13,g:10,s:900,e:'👩'},{n:'Raj',a:12,g:4,s:300,e:'🧒'}];
+const G=[['🔍','Row or Column?',6],['🃏','Memory Match',5],['🐞','Bug Hunter',4],['🕵️','Filter Detective',4],['🧱','Code Builder',4]];
+let me={name:'',cls:''},S={},V={};
+const $=id=>document.getElementById(id),app=$('app');
+const sc=i=>Object.values(S[i]||{}).reduce((x,y)=>x+y,0);
+const setS=(i,k,v)=>{S[i]=S[i]||{};S[i][k]=Math.max(S[i][k]||0,v)};
+const esc=s=>s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+const say=(c,t)=>`<div class="say"><div class="c">${c}</div><div>${t}</div></div>`;
+const tip=l=>`<details class="tips" open><summary>💡 Tips to help you</summary><ul>${l.map(x=>`<li>${x}</li>`).join('')}</ul></details>`;
+const PEA=w=>`<svg width="${w}" viewBox="0 0 200 160">${[0,1,2,3,4,5,6].map(i=>{const d=-60+i*20,a=d*Math.PI/180,x=100+Math.sin(a)*68,y=78-Math.cos(a)*52;return `<ellipse cx="${x}" cy="${y}" rx="14" ry="23" transform="rotate(${d} ${x} ${y})" fill="#1f45c8"/><circle cx="${x}" cy="${y}" r="8" fill="#0a8f7f"/><circle cx="${x}" cy="${y}" r="3.5" fill="#ffd23f"/>`}).join('')}<ellipse cx="100" cy="118" rx="22" ry="28" fill="#0a8f7f"/><circle cx="100" cy="84" r="13" fill="#0a8f7f"/><path d="M100 72v-12M96 62l-4-7M104 62l4-7" stroke="#ffd23f" stroke-width="3"/><circle cx="105" cy="82" r="3" fill="#fff"/><path d="M111 84l9 3-9 3z" fill="#e67e00"/></svg>`;
+const tbl=(rows,o={})=>{const C=[['e',''],['n','Name'],['a','Age'],['g','Games Played'],['s','Score']];
+ return `<div class="wrap"><table class="t"><tr>${C.map(c=>`<th class="${o.hc===c[0]?'hl':''}">${c[1]}</th>`).join('')}</tr>${rows.map(r=>`<tr>${C.map(c=>`<td class="${o.hc===c[0]||o.hr===r.n?'hl':''}">${r[c[0]]}</td>`).join('')}</tr>`).join('')}</table></div>`};
+function mk(i,tips){V[i]=1;app.innerHTML=`<span class="pill">🎮 Game ${i+1} of 5</span><h2>${G[i][0]} ${G[i][1]}</h2><div class="card"><div id="gm"></div>${tip(tips)}</div><div class="nav"><button class="b w" onclick="home()">⬅ Menu</button>${i<4?`<button class="b" onclick="go(${i+1})">Next Game ➡</button>`:`<button class="b o" onclick="results()">See My Results 🏆</button>`}</div>`;window.scrollTo(0,0)}
+const go=i=>[g1,g2,g3,g4,g5][i]();
+const nx=f=>`<button class="b o" onclick="${f}">Next ➡</button>`;
+const fin=()=>say('🦚','🎉 Well done! You finished this game. Try another one from the menu!');
+
+function splash(){app.innerHTML=`<div class="hero"><div class="ci">${PEA(190)}</div><h1 style="font-size:46px;margin-top:20px">Pandas Mini Games</h1><div class="sub">Organizing and Exploring Data</div><button class="b o" onclick="reg()">Begin 🚀</button></div>`}
+function reg(){app.innerHTML=`<div class="card" style="text-align:center">${say('🦚','Hello, Data Scientist! Tell me your name and class to start playing.')}<p><input type="text" id="nm" placeholder="Your name" maxlength="40"></p><p><input type="text" id="cl" placeholder="Your class (e.g. Class 6)" maxlength="20"></p><p id="er" class="no"></p><button class="b" onclick="enter()">Enter Games 🎮</button></div>`}
+function enter(){const n=$('nm').value.trim(),c=$('cl').value.trim();if(!n||!c){$('er').textContent='Please type your name and class first 🙂';return}me={name:n,cls:c};home()}
+function home(){app.innerHTML=`<h1>Hi ${esc(me.name)}! 🦚</h1><div class="sub">Pick any game. No timer, just fun!</div><div class="menu">${G.map((g,i)=>`<button class="mc ${V[i]?'v':''}" onclick="go(${i})"><span class="e">${g[0]}</span><b>${g[1]}</b><small>${'⭐'.repeat(sc(i))}${'☆'.repeat(g[2]-sc(i))}</small></button>`).join('')}<button class="mc" onclick="results()" style="border-color:#ffd23f"><span class="e">🏅</span><b>My Results</b><small>See &amp; download</small></button></div>`}
+
+/* 1 Row or Column */
+const R1=[['r','Ali'],['c','s'],['r','Neha'],['c','g'],['c','n'],['r','Raj']];let r1=0;
+function g1(){r1=0;mk(0,['A <b>ROW</b> goes across ➡ and is ONE student.','A <b>COLUMN</b> goes down ⬇ and is ONE kind of fact (like Score).','Look at the yellow part: across or down?']);d1()}
+function d1(){if(r1>=6){$('gm').innerHTML=fin();return}const q=R1[r1];$('gm').innerHTML=`<p class="prog">Round ${r1+1} of 6</p>${tbl(T,q[0]==='r'?{hr:q[1]}:{hc:q[1]})}<p>Is the yellow part a…</p><button class="b" onclick="a1('r')">➡ ROW</button><button class="b g" onclick="a1('c')">⬇ COLUMN</button><div id="fb"></div>`}
+function a1(x){if(x===R1[r1][0]){setS(0,'r'+r1,1);$('fb').innerHTML='<p class="ok">✅ Yes!</p>'+nx('r1++;d1()')}else $('fb').innerHTML='<p class="no">❌ Try again. Does it go across or down?</p>'}
+
+/* 2 Memory Match */
+const P=[['df.head()','Shows the first rows'],['df.shape','Counts rows and columns'],["df['Score']",'Picks one column'],['.max()','Finds the biggest'],['.mean()','Finds the average']];let cs=[],op=[],lock=false;
+function g2(){const a=[];P.forEach((p,i)=>{a.push({i,t:p[0],c:1,m:0},{i,t:p[1],c:0,m:0})});cs=a.sort(()=>Math.random()-.5);op=[];lock=false;mk(1,['Flip two cards. Match the <b>code</b> with what it <b>does</b>.','If they do not match, they flip back. Remember where they are!','<code>.max()</code> = biggest, <code>.mean()</code> = average.']);d2()}
+function d2(){const dn=cs.every(c=>c.m);$('gm').innerHTML=`<p class="prog">Matched: ${cs.filter(c=>c.m).length/2} of 5</p><div class="mem">${cs.map((c,k)=>`<button class="cardm ${c.m?'f m':op.includes(k)?'f':''}" onclick="fl(${k})">${c.m||op.includes(k)?(c.c?'<code>'+esc(c.t)+'</code>':esc(c.t)):'🦚'}</button>`).join('')}</div>${dn?fin():''}`}
+function fl(k){if(lock||cs[k].m||op.includes(k))return;op.push(k);d2();if(op.length===2){const[a,b]=op;if(cs[a].i===cs[b].i){cs[a].m=cs[b].m=1;setS(1,'p'+cs[a].i,1);op=[];setTimeout(d2,400)}else{lock=true;setTimeout(()=>{op=[];lock=false;d2()},1100)}}}
+
+/* 3 Bug Hunter */
+const B=[["df['score'].max()",['The word max is wrong','Score needs a capital S','df is wrong'],1,'Python cares about capital letters: score is not Score.'],["df.shape()",['shape needs no brackets','shape needs a capital S','df needs quotes'],0,'shape just gives a fact, so it has no ( ).'],["df['Score'].mean",['Score is spelled wrong','mean needs ( ) brackets','mean needs a capital M'],1,'Actions like mean() need round brackets to run.'],["df[df['Games'] > 5",['The 5 is wrong','Games needs no quotes','A closing ] is missing'],2,'Every [ needs a ] to close it.']];let r3=0;
+function g3(){r3=0;mk(2,['Read the code slowly, one piece at a time.','Check: capital letters, quotes, and brackets.','Round brackets ( ) run actions. Square brackets [ ] pick things.']);d3()}
+function d3(){if(r3>=B.length){$('gm').innerHTML=fin();return}const b=B[r3];$('gm').innerHTML=`<p class="prog">Bug ${r3+1} of 4</p><p>This code has a mistake. Find it!</p><pre class="code">${esc(b[0])}</pre>${b[1].map((o,j)=>`<button class="b opt" onclick="a3(${j},this)">${o}</button>`).join('')}<div id="fb"></div>`}
+function a3(j,el){const b=B[r3];if(j===b[2]){el.classList.add('right');setS(2,'b'+r3,1);$('fb').innerHTML=`<p class="ok">✅ ${b[3]}</p>`+nx('r3++;d3()')}else{el.classList.add('wrong');$('fb').innerHTML='<p class="no">❌ Not that one. Look again!</p>'}}
+
+/* 4 Filter Detective */
+const F=[["df[df['Score'] > 500]",x=>x.s>500],["df[df['Games'] < 6]",x=>x.g<6],["df[df['Age'] == 13]",x=>x.a==13],["df[df['Score'] >= 700]",x=>x.s>=700]];let r4=0;
+function g4(){r4=0;mk(3,['The test inside the brackets decides who stays in the table.','Check <b>every</b> student one by one against the test.','<code>&gt;</code> means more than. <code>&lt;</code> means less than. <code>&gt;=</code> includes the number itself.']);d4()}
+function d4(){if(r4>=F.length){$('gm').innerHTML=fin();return}$('gm').innerHTML=`<p class="prog">Case ${r4+1} of 4</p>${tbl(T)}<p>If we run this code, <b>who stays</b> in the table?</p><pre class="code">${esc(F[r4][0])}</pre>${T.map(t=>`<button class="nm" data-q="f" onclick="this.classList.toggle('sel')">${t.n}</button>`).join('')}<br><button class="b" onclick="a4()">Check ✅</button><div id="fb"></div>`}
+function a4(){const s=[...document.querySelectorAll('[data-q="f"].sel')].map(x=>x.textContent).sort().join(),w=T.filter(F[r4][1]).map(x=>x.n).sort().join();if(s===w){setS(3,'f'+r4,1);$('fb').innerHTML='<p class="ok">✅ Case solved!</p>'+nx('r4++;d4()')}else $('fb').innerHTML='<p class="no">❌ Not yet. Test each student against the code.</p>'}
+
+/* 5 Code Builder */
+const K=[['Find the highest Score',['df',"['Score']",'.max','()']],['Find the average of Games',['df',"['Games']",'.mean','()']],['Show students with Score more than 500',['df[','df',"['Score']",'>','500',']']],['Show the first rows of the table',['df','.head','()']]];let r5=0,tk=[],bt=[];
+function g5(){r5=0;mk(4,['Tap the pieces in the right order to build the code line.','Start with <code>df</code>. Then pick a column, then the action.','Made a mistake? Use Undo or Clear.']);d5()}
+function d5(){if(r5>=K.length){$('gm').innerHTML=fin();return}tk=K[r5][1].map((t,i)=>({t,i})).sort(()=>Math.random()-.5);bt=[];dr5()}
+function dr5(){const k=K[r5];$('gm').innerHTML=`<p class="prog">Build ${r5+1} of 4</p><p><b>Goal:</b> ${k[0]}</p><pre class="code">${esc(bt.map(i=>tk.find(x=>x.i===i).t).join(''))}</pre>${tk.map(x=>`<button class="nm" ${bt.includes(x.i)?'disabled':''} onclick="pk(${x.i})">${esc(x.t)}</button>`).join('')}<br><button class="b w" onclick="bt.pop();dr5()">↩ Undo</button><button class="b w" onclick="bt=[];dr5()">Clear</button><div id="fb"></div>`}
+function pk(i){bt.push(i);dr5();if(bt.length===tk.length){const s=bt.map(j=>tk.find(x=>x.i===j).t).join(''),ok=s===K[r5][1].join('');if(ok){setS(4,'k'+r5,1);$('fb').innerHTML='<p class="ok">✅ Perfect code!</p>'+nx('r5++;d5()')}else $('fb').innerHTML='<p class="no">❌ Not quite. Press Clear and try again.</p>'}}
+
+function results(){const tot=G.reduce((s,_,i)=>s+sc(i),0),mx=G.reduce((s,g)=>s+g[2],0);
+ app.innerHTML=`<h1>🏅 My Results</h1><div class="card"><p><b>Name:</b> ${esc(me.name)} &nbsp; <b>Class:</b> ${esc(me.cls)}</p><table class="t"><tr><th>Game</th><th>Points</th><th>Stars</th></tr>${G.map((g,i)=>`<tr><td>${g[0]} ${g[1]}</td><td>${sc(i)} / ${g[2]}</td><td>${'⭐'.repeat(sc(i))}${'☆'.repeat(g[2]-sc(i))}</td></tr>`).join('')}<tr><th>Total</th><th colspan="2">${tot} / ${mx}</th></tr></table>
+${say('🦚',tot>=mx*.8?'Fantastic! You are a real Data Scientist! 🎉':'Great effort! Play more games to earn more stars ⭐')}<button class="b g" onclick="dl()">📥 Download my result (PDF)</button></div><button class="b w" onclick="home()">⬅ Back to Menu</button>`}
+function dl(){const tot=G.reduce((s,_,i)=>s+sc(i),0),mx=G.reduce((s,g)=>s+g[2],0);
+ const L=[['Young IT Germany',12],['Pandas Mini Games',22],['',8],['Name: '+me.name,16],['Class: '+me.cls,16],['Date: '+new Date().toLocaleDateString(),12],['',8],...G.map((g,i)=>[g[1]+':  '+sc(i)+' / '+g[2],15]),['',8],['Total points: '+tot+' / '+mx,20],['',8],['Great work, Data Scientist!',14]];
+ let y=790,c='BT\n';L.forEach(l=>{c+=`/F1 ${l[1]} Tf 1 0 0 1 50 ${y} Tm (${l[0].replace(/[^\x20-\x7e]/g,'?').replace(/([\\()])/g,'\\$1')}) Tj\n`;y-=l[1]+14});c+='ET';
+ const O=['<</Type/Catalog/Pages 2 0 R>>','<</Type/Pages/Kids[3 0 R]/Count 1>>','<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Contents 4 0 R/Resources<</Font<</F1 5 0 R>>>>>>',`<</Length ${c.length}>>\nstream\n${c}\nendstream`,'<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>'];
+ let p='%PDF-1.4\n',off=[];O.forEach((o,i)=>{off.push(p.length);p+=`${i+1} 0 obj\n${o}\nendobj\n`});const x=p.length;
+ p+=`xref\n0 ${O.length+1}\n0000000000 65535 f \n`+off.map(o=>String(o).padStart(10,'0')+' 00000 n \n').join('')+`trailer\n<</Size ${O.length+1}/Root 1 0 R>>\nstartxref\n${x}\n%%EOF`;
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([p],{type:'application/pdf'}));a.download='pandas-games-'+me.name.replace(/\W+/g,'_')+'.pdf';document.body.appendChild(a);a.click();a.remove()}
+splash();
+</script></body></html>
